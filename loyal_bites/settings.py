@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'stamps',
     'bookings',
     'rewards',
+    'merchant',
 ]
 
 # Middleware configuration
