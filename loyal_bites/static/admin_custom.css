@@ -1,0 +1,38 @@
+/********* Custom Django Admin Panel Styles *********/
+body {
+    background-color: #ecf0f1;
+    font-family: Arial, sans-serif;
+}
+
+/* Header */
+#header {
+    background-color: #2c3e50 !important;
+    color: white !important;
+}
+
+/* Custom Dashboard */
+.custom-dashboard {
+    text-align: center;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* Dashboard Buttons */
+.dashboard-box {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.dashboard-link {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+.dashboard-link:hover {
+    background-color: #2980b9;
+}
