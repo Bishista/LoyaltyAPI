@@ -13,7 +13,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-default-key')
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
 # Hosts allowed to access the application
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
+ALLOWED_HOSTS = ['*']
 
 # Installed applications
 INSTALLED_APPS = [
@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'bookings',
     'rewards',
     'merchant',
+    'loyalty',
 ]
 
 # Middleware configuration
@@ -91,7 +92,7 @@ REST_FRAMEWORK = {
 }
 
 # CORS settings (allowed origins for frontend)
-CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:3000,http://127.0.0.1:8000').split(',')
+CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:3000,http://127.0.0.1:8000', ).split(',')
 
 # Email Configuration (Uses SMTP, secure setup with environment variables)
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
