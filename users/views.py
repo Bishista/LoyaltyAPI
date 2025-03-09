@@ -23,6 +23,7 @@ def send_otp_via_sms(phone_number, otp):
 
 class RegisterView(generics.CreateAPIView):
     serializer_class = RegisterSerializer
+    permission_classes = [AllowAny]
 
     def perform_create(self, serializer):
         user = serializer.save()
@@ -33,7 +34,12 @@ class RegisterView(generics.CreateAPIView):
         # Send OTP via SMS
         send_otp_via_sms(user.phone_number, otp_code)
 
-        return Response({'message': 'OTP sent via SMS'}, status=status.HTTP_201_CREATED)
+        return Response({
+            'message': 'User registered successfully! OTP sent via SMS.',
+            'user_id': user.id,
+            'phone_number': user.phone_number
+        }, status=status.HTTP_201_CREATED)
+
 
 class VerifyOTPView(APIView):
     def post(self, request):
@@ -52,19 +58,35 @@ class VerifyOTPView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LoginView(APIView):
-    permission_classes = [AllowAny]  # Allow all users to login
-    
+    permission_classes = [AllowAny]  
+
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
             phone_number = serializer.validated_data['phone_number']
             password = serializer.validated_data['password']
-            user = authenticate(username=phone_number, password=password)
+            
+            try:
+                user = CustomUser.objects.get(phone_number=phone_number)
+            except CustomUser.DoesNotExist:
+                return Response({'error': 'User does not exist'}, status=status.HTTP_400_BAD_REQUEST)
+
+            user = authenticate(username=user.username, password=password)
+
             if user:
                 refresh = RefreshToken.for_user(user)
                 return Response({
+                    'message': 'Login successful',
+                    'user': {
+                        'id': user.id,
+                        'username': user.username,
+                        'email': user.email,
+                        'phone_number': user.phone_number,
+                        'is_verified': user.is_verified
+                    },
                     'refresh': str(refresh),
                     'access': str(refresh.access_token),
-                })
+                }, status=status.HTTP_200_OK)
             return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
