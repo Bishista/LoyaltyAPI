@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container mt-4">
+    <h2>Manage Users</h2>
+    <button class="btn btn-primary" onclick="fetchUsers()">Refresh Users</button>
+    <table class="table mt-3">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Role</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="userTable">
+        </tbody>
+    </table>
+</div>
+
+<script>
+function fetchUsers() {
+    fetch("/api/users/manage-users/")
+        .then(response => response.json())
+        .then(data => {
+            let table = document.getElementById("userTable");
+            table.innerHTML = "";
+            data.forEach(user => {
+                table.innerHTML += `
+                    <tr>
+                        <td>${user.username}</td>
+                        <td>${user.email}</td>
+                        <td>${user.phone_number}</td>
+                        <td>${user.role}</td>
+                        <td>
+                            <button class="btn btn-danger btn-sm" onclick="deleteUser(${user.id})">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        });
+}
+
+function deleteUser(userId) {
+    fetch(`/api/users/manage-users/${userId}/`, { method: "DELETE" })
+        .then(() => {
+            alert("User deleted!");
+            fetchUsers();
+        });
+}
+
+window.onload = fetchUsers;
+</script>
+
+</body>
+</html>

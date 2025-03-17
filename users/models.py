@@ -15,3 +15,15 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return f"{self.username} - {self.role} - {self.phone_number}"
+
+    @property
+    def is_admin(self):
+        return self.role == 'admin'
+
+    @property
+    def is_employee(self):
+        return self.role == 'restaurant'
+
+    @property
+    def is_customer(self):
+        return self.role == 'user'

@@ -1,0 +1,32 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+}
+
+#sidebar {
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+}
+
+#main-content {
+    margin-left: 250px;
+    padding: 20px;
+}
+
+.card {
+    border-radius: 10px;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    #sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+    #main-content {
+        margin-left: 0;
+    }
+}

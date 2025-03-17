@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.auth.models import User
 from django.conf import settings 
 
 class Reward(models.Model):
@@ -11,7 +10,7 @@ class Reward(models.Model):
         return f"{self.name} - Requires {self.required_stamps} stamps"
 
 class Redemption(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="rewards_redemptions")
     reward = models.ForeignKey(Reward, on_delete=models.CASCADE)
     redeemed_at = models.DateTimeField(auto_now_add=True)
 

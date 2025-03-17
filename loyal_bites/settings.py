@@ -23,11 +23,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
 
     # Third-party apps
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
+    
+    
+    # websocket
+    # "daphne",
+    # "channels",
 
     # Custom apps
     'users',
@@ -37,7 +43,28 @@ INSTALLED_APPS = [
     'rewards',
     'merchant',
     'loyalty',
+    'admin_dashboard',
+    
 ]
+
+# For the admin panel 
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
+
+# For websockets
+# ASGI_APPLICATION = "loyal_bites.asgi.application"
+
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels_redis.core.RedisChannelLayer",
+#         "CONFIG": {
+#             "hosts": [("127.0.0.1", 6379)],
+#         },
+#     },
+# }
+
 
 # Middleware configuration
 MIDDLEWARE = [

@@ -7,7 +7,8 @@ class LoyaltyProgram(models.Model):
     description = models.TextField()
     points_required = models.IntegerField()  # Points needed to redeem
     discount_percentage = models.FloatField()  # Discount percentage
-    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)  # Linked to a restaurant
+    restaurant = models.CharField(max_length=100, default="Default Restaurant")
+ # Linked to a restaurant
     created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE)  # Merchant/admin who created it
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

@@ -26,4 +26,5 @@ urlpatterns = [
     path('rewards/', include('rewards.urls')),
     path('merchant/', include('merchant.urls')),
     path('loyalty/', include('loyalty.urls')),
+    path('admin-dashboard/', include('admin_dashboard.urls')),
 ]
