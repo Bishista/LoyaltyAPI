@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import CustomUser
 from .serializers import RegisterSerializer, LoginSerializer, EmployeeCreateSerializer, UserSerializer
-from .permissions import IsAdmin, IsRestaurant, IsUser
+from .permissions import IsAdmin, IsRestaurant, IsUser, IsSuperUser
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
 # 🔹 Function to send OTP via SMS
@@ -80,7 +80,7 @@ class LoginView(APIView):
 class ManageUsersView(generics.ListCreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated, IsAdmin]  
+    permission_classes = [IsSuperUser]  
 
     def create(self, request, *args, **kwargs):
         print("🔹 Received Data:", request.data)  # Debugging

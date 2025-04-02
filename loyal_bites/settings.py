@@ -28,7 +28,7 @@ INSTALLED_APPS = [
     # Third-party apps
     'rest_framework',
     'rest_framework_simplejwt',
-    'corsheaders',
+    # 'corsheaders',
     
     
     # websocket
@@ -39,19 +39,19 @@ INSTALLED_APPS = [
     'users',
     'restaurants',
     'stamps',
-    'bookings',
+    
     'rewards',
     'merchant',
     'loyalty',
-    'admin_dashboard',
+   
     
 ]
 
 # For the admin panel 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
-]
+# STATIC_URL = '/static/'
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static')
+# ]
 
 # For websockets
 # ASGI_APPLICATION = "loyal_bites.asgi.application"
@@ -70,7 +70,7 @@ STATICFILES_DIRS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',  # CORS support
+    # 'corsheaders.middleware.CorsMiddleware',  # CORS support
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -119,7 +119,7 @@ REST_FRAMEWORK = {
 }
 
 # CORS settings (allowed origins for frontend)
-CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:3000,http://127.0.0.1:8000', ).split(',')
+CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:5173,http://127.0.0.1:5173', ).split(',')
 
 # Email Configuration (Uses SMTP, secure setup with environment variables)
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
