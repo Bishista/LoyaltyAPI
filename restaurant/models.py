@@ -8,16 +8,17 @@ class Restaurant(models.Model):
     contact_email = models.EmailField()
     contact_phone = models.CharField(max_length=20)
     created_by = models.ForeignKey('accounts.User', on_delete=models.CASCADE, limit_choices_to={'role': 'admin'})
+    # logo = models.ImageField(upload_to='restaurant_logos/', null=True, blank=True)
 
     def __str__(self):
         return self.name
     
 class MenuItem(models.Model):
-    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='menu_items')
     name = models.CharField(max_length=255)
     description = models.TextField()
     price = models.DecimalField(max_digits=6, decimal_places=2)
-
+    image = models.ImageField(null = True)
+    
     def __str__(self):
         return f"{self.name} - {self.restaurant.name}"
 
@@ -29,6 +30,7 @@ class Booking(models.Model):
     expires_at = models.DateTimeField()
 
     def save(self, *args, **kwargs):
+        
         if not self.expires_at:
             self.expires_at = timezone.now() + timedelta(minutes=30)
         super().save(*args, **kwargs)

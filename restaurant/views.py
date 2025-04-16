@@ -2,7 +2,7 @@
 from rest_framework import viewsets
 from .models import Restaurant, MenuItem, Booking, Review
 from .serializers import RestaurantSerializer, MenuItemSerializer, BookingSerializer, ReviewSerializer
-from .permissions import IsAdminUser, IsCustomerUser
+from .permissions import IsAdminUser, IsCustomerUser, IsSuperUser, IsEmployeeUser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
@@ -19,19 +19,19 @@ class RestaurantViewSet(viewsets.ModelViewSet):
 class MenuItemViewSet(viewsets.ModelViewSet):
     queryset = MenuItem.objects.all()
     serializer_class = MenuItemSerializer
-    permission_classes = [IsAuthenticated, IsAdminUser]
+    permission_classes = [IsAuthenticated, IsAdminUser|IsEmployeeUser]
 
 class BookingViewSet(viewsets.ModelViewSet):
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
-    permission_classes = [IsAuthenticated, IsCustomerUser]
+    permission_classes = [IsAuthenticated,IsCustomerUser|IsAdminUser|IsSuperUser]
 
     def perform_create(self, serializer):
         serializer.save(customer=self.request.user)
 
     def list(self, request):
         # Customers only see their bookings
-        bookings = Booking.objects.filter(customer=request.user)
+        bookings = Booking.objects.all()
         serializer = self.serializer_class(bookings, many=True)
         return Response(serializer.data)
 

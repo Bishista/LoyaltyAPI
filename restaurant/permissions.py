@@ -7,3 +7,12 @@ class IsAdminUser(BasePermission):
 class IsCustomerUser(BasePermission):
     def has_permission(self, request, view):
         return request.user and request.user.role == 'customer'
+
+class IsSuperUser(BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_superuser
+    
+
+class IsEmployeeUser(BasePermission):
+    def has_permission(self, request, view):
+        return request.user and request.user.role == 'employee'
