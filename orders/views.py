@@ -8,7 +8,7 @@ from rest_framework.decorators import action
 from django.db.models import Q
 
 class OrderViewSet(viewsets.ModelViewSet):
-    queryset = Order.objects.all()
+    queryset = Order.objects.all().order_by('-created_at')
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
 
@@ -50,15 +50,15 @@ class KOTViewSet(viewsets.ModelViewSet):  # Changed from ReadOnlyModelViewSet to
             
         return queryset
     
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['patch'])
     def update_status(self, request, pk=None):
         kot = self.get_object()
-        status = request.data.get('status')
+        new_status = request.data.get('status') 
         
-        if status not in [choice[0] for choice in KOT.KOT_STATUS_CHOICES]:
+        if new_status not in [choice[0] for choice in KOT.KOT_STATUS_CHOICES]:
             return Response({"error": "Invalid status"}, status=status.HTTP_400_BAD_REQUEST)
             
-        kot.status = status
+        kot.status = new_status
         kot.save()
         
         return Response(KOTSerializer(kot).data)

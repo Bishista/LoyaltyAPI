@@ -39,7 +39,7 @@ class Booking(models.Model):
 
 class Review(models.Model):
     customer = models.ForeignKey('accounts.User', on_delete=models.CASCADE)
-    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
+    # restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
     text = models.TextField()
     rating = models.IntegerField()
 

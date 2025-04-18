@@ -4,7 +4,7 @@ from django.db import models
 class Order(models.Model):
     restaurant_id = models.ForeignKey('restaurant.Restaurant', on_delete=models.CASCADE)
     customer_id = models.ForeignKey('accounts.User', on_delete=models.CASCADE)
-    items = models.ManyToManyField('restaurant.MenuItem', through='OrderItem')
+    # items = models.ManyToManyField('restaurant.MenuItem', through='OrderItem')
     special_instructions = models.TextField(blank=True)
     
     ORDER_STATUS_CHOICES = [
@@ -14,11 +14,12 @@ class Order(models.Model):
 ]
 
     status = models.CharField(max_length=20, choices=ORDER_STATUS_CHOICES, default='pending')
+    created_at = models.DateTimeField(auto_now_add=True, null =True)
 
 
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    item = models.ForeignKey('restaurant.MenuItem', on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
+    item = models.ForeignKey('restaurant.MenuItem',  on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
 
 # class KOT(models.Model):

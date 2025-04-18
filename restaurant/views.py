@@ -24,7 +24,7 @@ class MenuItemViewSet(viewsets.ModelViewSet):
 class BookingViewSet(viewsets.ModelViewSet):
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
-    permission_classes = [IsAuthenticated,IsCustomerUser|IsAdminUser|IsSuperUser]
+    permission_classes = [IsAuthenticated,IsCustomerUser|IsAdminUser|IsSuperUser|IsEmployeeUser]
 
     def perform_create(self, serializer):
         serializer.save(customer=self.request.user)
@@ -38,7 +38,7 @@ class BookingViewSet(viewsets.ModelViewSet):
 class ReviewViewSet(viewsets.ModelViewSet):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    permission_classes = [IsAuthenticated, IsCustomerUser]
+    permission_classes = [IsAuthenticated, IsCustomerUser|IsAdminUser|IsSuperUser]
 
     def perform_create(self, serializer):
         serializer.save(customer=self.request.user)

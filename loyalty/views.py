@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework import generics, status, permissions
 from rest_framework.response import Response
@@ -103,6 +104,18 @@ class CreateCardWithRewardView(APIView):
         serializer = DigitalLoyaltyCardListSerializer(cards, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
     
+    def put(self, request, pk=None):
+        card = get_object_or_404(DigitalLoyaltyCard, pk=pk)
+        serializer = DigitalLoyaltyCardCreateSerializer(card, data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"card": "updated successfully."}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk=None):
+        card = get_object_or_404(DigitalLoyaltyCard, pk=pk)
+        card.delete()
+        return Response({"card": "deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
     
 class IssueStampView(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -163,3 +176,26 @@ class StampTransactionDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = StampTransaction.objects.all()
     serializer_class = StampTransactionSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+
+
+class PieRewardView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        # Get the current user
+        user = request.user
+
+        # Get the restaurant associated with the user
+        restaurant = Restaurant.objects.get(user=user)
+
+        # Get all rewards for the restaurant
+        rewards = Reward.objects.filter(restaurant=restaurant)
+
+        # Create a dictionary to hold reward names and their counts
+        reward_data = {}
+        for reward in rewards:
+            reward_data[reward.name] = CustomerReward.objects.filter(reward=reward).count()
+
+        return Response(reward_data, status=status.HTTP_200_OK)

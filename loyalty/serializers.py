@@ -113,11 +113,11 @@ class StampSerializer(serializers.ModelSerializer):
         
 class UserDigitalCardSerializer(serializers.ModelSerializer):
     customer_name = serializers.CharField(source='customer.full_name', read_only=True)  # optional
-    card_name = serializers.CharField(source='card.name', read_only=True)  # optional
-
+    # card_name = serializers.CharField(source='card.name', read_only=True)  # optional
+    card = DigitalLoyaltyCardListSerializer(read_only=True)  # optional
     class Meta:
         model = UserDigitalCard
-        fields = ['id', 'customer', 'customer_name', 'card', 'card_name', 'date']
+        fields = ['id', 'customer', 'customer_name', 'card', 'date']
         read_only_fields = ['date']
 
 
