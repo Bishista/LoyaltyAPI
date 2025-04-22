@@ -8,6 +8,13 @@ class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderItem
         fields = ['item', 'quantity']
+    
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        rep['item'] = instance.item.name  # retain customer ID for clarity (optional)
+        return rep
+
+        
 
 class OrderSerializer(serializers.ModelSerializer):
     items = OrderItemSerializer(many=True)
@@ -46,13 +53,25 @@ class OrderSerializer(serializers.ModelSerializer):
 #         model = KOT
 #         fields = '__all__'
 class KOTSerializer(serializers.ModelSerializer):
-    # order_items = serializers.SerializerMethodField()
+    order_items = serializers.SerializerMethodField()
     restaurant_name = serializers.CharField(source='order.restaurant.name', read_only=True)
+    order_id = serializers.IntegerField(source='order.id', read_only=True)
+    customer_name = serializers.CharField(source='order.customer.name', read_only=True)
     
     class Meta:
         model = KOT
-        fields = ['id', 'order', 'table_number', 'created_at', 'status', 'restaurant_name']
+        fields = [
+            'id',
+            'order',
+            'order_id',
+            'customer_name',
+            'table_number',
+            'created_at',
+            'status',
+            'restaurant_name',
+            'order_items'
+        ]
     
-    # def get_order_items(self, obj):
-    #     order_items = OrderItem.objects.filter(order=obj.order)
-    #     return OrderItemSerializer(order_items, many=True).data
+    def get_order_items(self, obj):
+        order_items = OrderItem.objects.filter(order=obj.order)
+        return OrderItemSerializer(order_items, many=True).data

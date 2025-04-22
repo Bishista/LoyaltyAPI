@@ -168,3 +168,36 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         instance.delete()
         return Response({'detail': 'Employee deleted successfully.'}, status=status.HTTP_204_NO_CONTENT)
+    
+
+class UserProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = RegisterSerializer(request.user)
+        return Response(serializer.data)
+
+    def put(self, request):
+        serializer = RegisterSerializer(request.user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    
+class ChangePasswordView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        current_password = request.data.get('current_password')
+        new_password = request.data.get('new_password')
+
+        if not user.check_password(current_password):
+            return Response({'error': 'Current password is incorrect'}, status=400)
+
+        user.set_password(new_password)
+        user.save()
+        return Response({'message': 'Password changed successfully'})
+
+

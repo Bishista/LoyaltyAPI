@@ -28,6 +28,7 @@ class Booking(models.Model):
     customer = models.ForeignKey('accounts.User', on_delete=models.CASCADE)
     booking_time = models.DateTimeField(auto_now_add=True)
     expires_at = models.DateTimeField()
+    table_number = models.IntegerField()
 
     def save(self, *args, **kwargs):
         
@@ -45,5 +46,19 @@ class Review(models.Model):
 
     def __str__(self):
         return f"{self.customer.name} on {self.restaurant.name}"
+    
+    
+
+
+class RestaurantDetail(models.Model):
+    restaurant = models.OneToOneField(Restaurant, on_delete=models.CASCADE, related_name='details')
+    description = models.TextField()
+    location = models.CharField(max_length=255)
+    parking_available = models.BooleanField(default=False)
+    contact_number = models.CharField(max_length=20)
+
+    def __str__(self):
+        return f"{self.restaurant.name} Details"
+
 
 

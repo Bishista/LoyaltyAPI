@@ -32,6 +32,7 @@ class KOT(models.Model):
     table_number = models.CharField(max_length=10)
     created_at = models.DateTimeField(auto_now_add=True)
     
+    
     KOT_STATUS_CHOICES = [
         ('pending', 'Pending'),
         ('completed', 'Completed'),

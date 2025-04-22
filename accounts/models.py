@@ -15,6 +15,8 @@ class UserManager(BaseUserManager):
         return self.create_user(phone, name, email, password, role='admin')
 
 class User(AbstractBaseUser, PermissionsMixin):
+    
+    profile_picture = models.ImageField(upload_to='profiles/', null=True, blank=True) 
     ROLE_CHOICES = (
         ('customer', 'Customer'),
         ('employee', 'Employee'),
@@ -26,6 +28,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     role = models.CharField(max_length=10, choices=ROLE_CHOICES)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    
+    
 
     USERNAME_FIELD = 'phone'
     REQUIRED_FIELDS = ['email', 'name']
